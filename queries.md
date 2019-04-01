@@ -19,13 +19,19 @@
         select * from customers where CustomerName like '%market%'
 
 ## add a customer record for _"The Shire"_, the contact name is _"Bilbo Baggins"_ the address is _"1 Hobbit-Hole"_ in _"Bag End"_, postal code _"111"_ and the country is _"Middle Earth"_.
+        insert into customers (CustomerName, ContactName, address, city, PostalCode, country) values ('The Shire', 'Bilbo Baggins', '1 Hobbit-Hole', 'Bag End', '111', 'Middle Earth')  --- I didn't have to put postal code as a string, but i did it so, since some postal codes have letters in them
 
 ## update _Bilbo Baggins_ record so that the postal code changes to _"11122"_.
+        update customers set PostalCode = '11122' where customerID = 94
 
 ## list orders grouped by customer showing the number of orders per customer. _Rattlesnake Canyon Grocery_ should have 7 orders.
+        select Customers.customerName, COUNT(Orders.customerid) FROM Orders INNER JOIN Customers ON Orders.customerid=customers.customerid GROUP BY customers.customerName
 
 ## list customers names and the number of orders per customer. Sort the list by number of orders in descending order. _Ernst Handel_ should be at the top with 10 orders followed by _QUICK-Stop_, _Rattlesnake Canyon Grocery_ and _Wartian Herkku_ with 7 orders each.
+        select Customers.customername, count(Orders.customerid) from Orders INNER JOIN Customers ON Orders.customerid=customers.customerid GROUP BY customername ORDER BY COUNT(Orders.customerid) desc
 
 ## list orders grouped by customer's city showing number of orders per city. Returns 58 Records with _Aachen_ showing 2 orders and _Albuquerque_ showing 7 orders.
+        select customers.city, count(orders.customerid) from orders inner join customers on orders.customerid=customers.customerid group by city
 
 ## delete all users that have no orders. Should delete 17 (or 18 if you haven't deleted the record added) records.
+        delete FROM customers WHERE NOT EXISTS (select * FROM orders WHERE orders.customerid = customers.customerid)    
